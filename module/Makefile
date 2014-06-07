@@ -1,4 +1,4 @@
-obj-m := dev_driver.o
+obj-m := stopwatch.o
 
 KDIR := /root/mylinux/kernel/kernel-root
 PWD := $(shell pwd)

@@ -2,22 +2,22 @@
 
 static struct timer_list my_timer;
 
-void timer_handler(unsigned int _){
-	//current_turn();
+#define TimerRefresh do{ \
+	my_timer.expires = get_jiffies_64() + HZ; \
+	add_timer(&my_timer); \
+}while(false);
+
+void timer_handler(unsigned int ptr){
+	struct StopWatch *p = (struct StopWatch *)ptr;
+	CurrentTurn(p);
+	TimerRefresh;
 }
 
-void timer_init(unsigned int _){
+void timer_init(unsigned int ptr){
 	init_timer(&my_timer);
-	my_timer.expires = get_jiffies_64() + HZ * 1;
-	my_timer.data = 0;
+	my_timer.data = ptr;
 	my_timer.function = timer_handler;
-	add_timer(&my_timer);
-}
-
-void timer_add(int wanted){
-	my_timer.expires = get_jiffies_64() + wanted * HZ / 10;
-	printk("%d\n", HZ);
-	add_timer(&my_timer);
+	TimerRefresh;
 }
 
 void timer_exit(){

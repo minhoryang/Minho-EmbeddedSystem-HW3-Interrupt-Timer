@@ -19,8 +19,8 @@ ssize_t gpio_fnd_write(unsigned short fnd_buff)
     fnd_sel=(char)(fnd_buff>>8);
     fnd_dat=(char)(fnd_buff&0x00FF);
 
-    printk("FND Secect : %d\n",fnd_sel);
-    printk("Fnd Data : %d\n",fnd_dat);
+    //printk("FND Secect : %d\n",fnd_sel);
+    //printk("Fnd Data : %d\n",fnd_dat);
 	
 
     outb (fnd_sel,(unsigned int)fnd_data2);

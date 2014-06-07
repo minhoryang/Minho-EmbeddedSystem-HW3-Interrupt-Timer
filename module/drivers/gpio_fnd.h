@@ -24,16 +24,17 @@ short my_gpio_fnd_loc[5] = {
 	gpio_fnd_loc_4
 };
 
-short my_gpio_fnd_num[9] = {
-	gpio_fnd_num_X,
-	0x73,//gpio_fnd_num_1,
-	0x8f,//gpio_fnd_num_2,
-	0x71,//gpio_fnd_num_3,
-	0x8d,//gpio_fnd_num_4,
-	0x61,//gpio_fnd_num_5,
-	0x0d,//gpio_fnd_num_6,
-	0x21,//gpio_fnd_num_7,
-	0x05//gpio_fnd_num_8
+short my_gpio_fnd_num[10] = {
+	gpio_fnd_num_0,
+	gpio_fnd_num_1,
+	gpio_fnd_num_2,
+	gpio_fnd_num_3,
+	gpio_fnd_num_4,
+	gpio_fnd_num_5,
+	gpio_fnd_num_6,
+	gpio_fnd_num_7,
+	gpio_fnd_num_8,
+	gpio_fnd_num_9
 };
 
 short my_gpio_fnd(int a, int b){
