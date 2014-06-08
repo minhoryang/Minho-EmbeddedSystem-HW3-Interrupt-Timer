@@ -1,3 +1,4 @@
+#include <linux/timer.h>
 struct StopWatch{
 	bool isRun;
 	bool isPause;
@@ -50,14 +51,14 @@ irqreturn_t ResetButton(int irq, void *dev_id, struct pt_regs *reg){
 	Reset(&my_stopwatch);
 	return IRQ_HANDLED;
 }
-unsigned int now =0;
+bool shutdown_timer_start = false;
 irqreturn_t ExitButton(int irq, void *dev_id, struct pt_regs *reg){
-	if(now){
-		now = 0;
-		printk("reset\n");
+	if(!shutdown_timer_start){
+		printk("HELLO!!!!!!\n");
+		shutdown_timer_start = true;
 	}else{
-		now = get_jiffies_64();
-		printk("set\n");
-	}	
+		printk("FUCKER!!!!!!\n");
+		shutdown_timer_start = false;
+	}
 	return IRQ_HANDLED;
 }

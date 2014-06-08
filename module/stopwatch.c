@@ -18,8 +18,6 @@
 #include <linux/wait.h>
 
 int interruptCount = 0;
-wait_queue_head_t wq_write;
-DECLARE_WAIT_QUEUE_HEAD(wq_write);
 
 #include "./drivers/gpio_fnd.c"
 #include "./rocks.c"
@@ -48,6 +46,8 @@ int _release(struct inode *minode, struct file *mfile){
 	printk("20091631 Release\t\n");
 	return 0;
 }
+bool shutdown_timer_watch_start = false;
+unsigned int time;
 ssize_t _write(struct file *mfile, const char *gdata, size_t length, loff_t *off_what){
 	int ret;
 	if(interruptCount == 0){
@@ -58,8 +58,6 @@ ssize_t _write(struct file *mfile, const char *gdata, size_t length, loff_t *off
 		Reset(&my_stopwatch);
 		timer_init(&my_stopwatch);
 		printk("SleepStart!\n");
-		//interruptible_sleep_on(&wq_write);
-		now = 0;
 		while(true){
 			gpio_fnd_write(my_gpio_fnd(1, my_stopwatch.min / 10));
 			msleep(5);
@@ -69,9 +67,21 @@ ssize_t _write(struct file *mfile, const char *gdata, size_t length, loff_t *off
 			msleep(5);
 			gpio_fnd_write(my_gpio_fnd(4, my_stopwatch.sec % 10));
 			msleep(5);
-			if(now){
-				if(get_jiffies_64() - now >= 3 * HZ){
-					break;
+			if(shutdown_timer_start){
+				if(!shutdown_timer_watch_start){ // timer start.
+					shutdown_timer_watch_start = true;
+					time = get_jiffies_64();
+					printk("add timer %u\n", time);
+				}else{
+					; // ignore.
+				}
+			}else{
+				if(shutdown_timer_watch_start){
+					shutdown_timer_watch_start = false;
+					unsigned int now = get_jiffies_64();
+					printk("get timer %u\n", now);
+					if(now - time >= 3*HZ)
+						break;
 				}
 			}
 		}
